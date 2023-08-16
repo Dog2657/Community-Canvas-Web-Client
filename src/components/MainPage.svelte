@@ -36,102 +36,102 @@
         ctx.stroke();
     }
 
-  function getActivePixal(){
-    return getAbsoluteLocationFromRelative(
-        Math.floor(scalePoint.x * 10) / 10,
-        Math.floor(scalePoint.y * 10) / 10,
-        scale, location
-    )
-  }
-
-  function zoom(e){
-    e.preventDefault()
-
-    const direction = Math.sign(e.deltaY)
-    const multiplyer = scale * 0.05;
-    
-    if(direction > 0){//Out
-      if(scale < 1)
-        return
-      
-      location = getLocationFromOldScale(scale - multiplyer, scale, location, scalePoint)
-      scale -= multiplyer
-
-    }else{//In
-      if(scale >= 750)
-        return
-
-      location = getLocationFromOldScale(scale + multiplyer, scale, location, scalePoint)
-      scale += multiplyer
+    function getActivePixal(){
+        return getAbsoluteLocationFromRelative(
+            Math.floor(scalePoint.x * 10) / 10,
+            Math.floor(scalePoint.y * 10) / 10,
+            scale, location
+        )
     }
 
-    render()
-  }
+    function zoom(e){
+        e.preventDefault()
 
-  function startDrag({clientX, clientY, originalTarget}){
-    var startVertical = clientY - (canvas.offsetTop + location.y);
-    var startHorizontal = clientX - (canvas.offsetLeft + location.x);
+        const direction = Math.sign(e.deltaY)
+        const multiplyer = scale * 0.05;
+        
+        if(direction > 0){//Out
+        if(scale < 1)
+            return
+        
+        location = getLocationFromOldScale(scale - multiplyer, scale, location, scalePoint)
+        scale -= multiplyer
 
-    canvas.style.cursor = 'grabbing'
+        }else{//In
+        if(scale >= 750)
+            return
 
-    function calcMove({clientX: x, clientY: y}){
-        x -= canvas.offsetLeft + startHorizontal
-        y -= canvas.offsetTop + startVertical
-
-        location = {x, y}
+        location = getLocationFromOldScale(scale + multiplyer, scale, location, scalePoint)
+        scale += multiplyer
+        }
 
         render()
     }
 
-    originalTarget.addEventListener('mousemove', calcMove)
-    window.addEventListener('mouseup', () => {
+    function startDrag({clientX, clientY, originalTarget}){
+        var startVertical = clientY - (canvas.offsetTop + location.y);
+        var startHorizontal = clientX - (canvas.offsetLeft + location.x);
 
-      canvas.style.cursor = ''
-      originalTarget.removeEventListener('mousemove', calcMove)
+        canvas.style.cursor = 'grabbing'
 
-    }, {once: true})
-  }
+        function calcMove({clientX: x, clientY: y}){
+            x -= canvas.offsetLeft + startHorizontal
+            y -= canvas.offsetTop + startVertical
 
-  async function handleClick({clientX, clientY}){
-    if(!isOnCanvas(clientX, clientY, scale, location, (await config).minDisplay))
-      return
+            location = {x, y}
 
-    let {x, y} = getRelativeLocationFromAbsolute(clientX, clientY, scale, location)
+            render()
+        }
 
-    x *= 10
-    y *= 10
+        originalTarget.addEventListener('mousemove', calcMove)
+        window.addEventListener('mouseup', () => {
 
-    x = Math.floor(x)
-    y = Math.floor(y)
+        canvas.style.cursor = ''
+        originalTarget.removeEventListener('mousemove', calcMove)
+
+        }, {once: true})
+    }
+
+    async function handleClick({clientX, clientY}){
+        if(!isOnCanvas(clientX, clientY, scale, location, (await config).minDisplay))
+        return
+
+        let {x, y} = getRelativeLocationFromAbsolute(clientX, clientY, scale, location)
+
+        x *= 10
+        y *= 10
+
+        x = Math.floor(x)
+        y = Math.floor(y)
 
 
-    fetch(`http://localhost:80/update?x=${x}&y=${y}&red=255&green=0&blue=0`, {method: "post"})
-  }
+        fetch(`http://localhost:80/update?x=${x}&y=${y}&red=255&green=0&blue=0`, {method: "post"})
+    }
 
-  function handleMouseEvents(e){
-    let dragTimer;
+    function handleMouseEvents(e){
+        let dragTimer;
 
-    dragTimer = setTimeout(() => {
-        dragTimer = null
-        startDrag(e)
-    }, 200);
+        dragTimer = setTimeout(() => {
+            dragTimer = null
+            startDrag(e)
+        }, 200);
 
 
-    window.addEventListener('mouseup', () => {
-        if(dragTimer === null)return
+        window.addEventListener('mouseup', () => {
+            if(dragTimer === null)return
 
-        clearTimeout(dragTimer)
-        handleClick(e)
-    }, {once: true})
-  }
+            clearTimeout(dragTimer)
+            handleClick(e)
+        }, {once: true})
+    }
 
-  async function updateScalePoint({clientX, clientY}){
-    if(!isOnCanvas(clientX, clientY, scale, location, (await config).minDisplay))
-      return
+    async function updateScalePoint({clientX, clientY}){
+        if(!isOnCanvas(clientX, clientY, scale, location, (await config).minDisplay))
+        return
 
-    scalePoint = getRelativeLocationFromAbsolute(clientX, clientY, scale, location)
-    render()
-  }
+        scalePoint = getRelativeLocationFromAbsolute(clientX, clientY, scale, location)
+        render()
+    }
 
 
   onMount(() => {
