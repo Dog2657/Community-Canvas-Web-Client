@@ -36,6 +36,23 @@
         ctx.stroke();
     }
 
+    async function updatePixel(event){
+        var ctx = (await sourceCanvas).getContext("2d");
+
+        const {location, value} = JSON.parse(event.data)
+
+        ctx.fillStyle = `rgb(${value.r}, ${value.g}, ${value.b})`
+
+        console.log('update')
+
+        ctx.beginPath();
+        ctx.rect(location.x, location.y, 1, 1);
+        ctx.fill();
+
+        render()
+    }
+    
+
     function getActivePixal(){
         return getAbsoluteLocationFromRelative(
             Math.floor(scalePoint.x * 10) / 10,
@@ -134,15 +151,17 @@
     }
 
 
-  onMount(() => {
-    canvas.width = window.innerWidth
-    canvas.height = window.innerHeight 
+    onMount(async () => {
+        canvas.width = window.innerWidth
+        canvas.height = window.innerHeight 
 
-    location.x = (window.innerWidth/2) - (150 * scale)
-    location.y = (window.innerHeight/2) - (100 * scale)
+        location.x = (window.innerWidth/2) - (150 * scale);
+        location.y = (window.innerHeight/2) - (100 * scale);
 
-    render()
-  })
+        (await notifier).addEventListener("message", updatePixel);
+
+        render()
+    })
   
 </script>
 
