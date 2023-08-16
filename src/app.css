@@ -1,0 +1,9 @@
+body{
+    margin: 0;
+    background-color: rgb(39, 42, 55);
+}
+
+body > main#app{
+    width: 100vw;
+    height: 100vh;
+}

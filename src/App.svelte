@@ -14,9 +14,3 @@
 {:catch error}
   <ErrorPage/>
 {/await}
-
-
-
-<style>
-  
-</style>
