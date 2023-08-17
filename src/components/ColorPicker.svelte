@@ -3,12 +3,12 @@
 
     let input: HTMLInputElement
 
-    let x = 0
-    let y = 0
+    let X = 0
+    let Y = 0
 
     export function show(x: number, y: number, rgb: Array<number>){
-        x = x
-        y = y
+        X = x
+        Y = y
 
         const r = rgb[0].toString(16)
         const g = rgb[1].toString(16)
@@ -27,7 +27,7 @@
         var green = parseInt(color[3] + color[4],16);
         var blue = parseInt(color[5] + color[6],16);
 
-        fetch(`http://localhost:80/update?x=${x}&y=${y}&red=${red}&green=${green}&blue=${blue}`, {method: "post"})
+        fetch(`http://localhost:80/update?x=${X}&y=${Y}&red=${red}&green=${green}&blue=${blue}`, {method: "post"})
     }
 </script>
 
