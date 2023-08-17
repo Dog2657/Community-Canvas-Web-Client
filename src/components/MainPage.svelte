@@ -1,10 +1,12 @@
-<script>
+<script lang="ts">
     import { getLocationFromOldScale, getRelativeLocationFromAbsolute, getAbsoluteLocationFromRelative, isOnCanvas } from '../lib/calculator'
     // @ts-ignore
     import { sourceCanvas, config, notifier } from '../lib/data'
+    import ColorPicker from './ColorPicker.svelte';
     import { onMount } from 'svelte';
 
-    let canvas
+    let canvas: HTMLCanvasElement
+    let colorPicker: ColorPicker
 
     let location = {x: 0, y: 0}
 
@@ -121,8 +123,10 @@
         x = Math.floor(x)
         y = Math.floor(y)
 
+        const ctx = (await sourceCanvas).getContext('2d');
+        var rgba = ctx.getImageData(x, y, 1, 1).data; 
 
-        fetch(`http://localhost:80/update?x=${x}&y=${y}&red=255&green=0&blue=0`, {method: "post"})
+        colorPicker.show(x, y, rgba)
     }
 
     function handleMouseEvents(e){
@@ -172,6 +176,8 @@
     render()
 }}/>
 
+<ColorPicker bind:this={colorPicker}/>
+  
 <canvas bind:this={canvas} on:mousemove={updateScalePoint} on:wheel={zoom} on:mousedown={handleMouseEvents}></canvas>
 
 <style lang="scss">

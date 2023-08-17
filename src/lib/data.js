@@ -30,6 +30,7 @@ export const sourceCanvas = new Promise(async (resolve, reject) => {
     const images = await Promise.all(
         new Array(details.colums * details.rows).fill(undefined).map((_, index) => new Promise((resolve, reject) => {
             let img = new Image(500, 500)
+            img.crossOrigin = "anonymous";
             img.src = `http://${baseUrl}/sections/${index}.png`
             img.onerror = () => reject
             img.onload = () => {resolve(img)}
