@@ -34,7 +34,7 @@
         ctx.strokeStyle = 'orange'
         ctx.lineWidth = 2
         ctx.beginPath();
-        ctx.rect(x, y, (scale/10) - 2, (scale/10) - 2);
+        ctx.rect(x + 1, y + 1, (scale/10) - 2, (scale/10) - 2);
         ctx.stroke();
     }
 
@@ -44,8 +44,6 @@
         const {location, value} = JSON.parse(event.data)
 
         ctx.fillStyle = `rgb(${value.r}, ${value.g}, ${value.b})`
-
-        console.log('update')
 
         ctx.beginPath();
         ctx.rect(location.x, location.y, 1, 1);
