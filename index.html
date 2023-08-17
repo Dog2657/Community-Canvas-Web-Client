@@ -5,9 +5,30 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Comunity Canvas</title>
+
+    <script type="module" src="/src/main.js" defer></script>
   </head>
   <body>
     <main id="app"></main>
-    <script type="module" src="/src/main.js"></script>
+    
+    <noscript>
+        This site requires javascript to function
+  
+        <style>
+          noscript{
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgb(39, 42, 55);
+            color: white;
+          }
+
+          body{
+            margin: 0;
+          }
+        </style>
+    </noscript>
   </body>
 </html>
